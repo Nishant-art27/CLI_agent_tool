@@ -6,7 +6,7 @@ import {
   writeFile as fsWriteFile,
   mkdir,
 } from "fs/promises";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
 import chalk from "chalk";
 import ora from "ora";
@@ -18,7 +18,7 @@ import axios from "axios";
 // Groq Client
 // ─────────────────────────────────────────────────────────────────────────────
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const MODEL_NAME = "llama-3.3-70b-versatile";
+const MODEL_NAME = "llama-3.1-8b-instant";
 const MAX_ITERATIONS = 30;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -105,6 +105,15 @@ const toolMap = {
 // ─────────────────────────────────────────────────────────────────────────────
 // System Prompt
 // ─────────────────────────────────────────────────────────────────────────────
+let scalerContext = "";
+try {
+  if (existsSync("scaler.html")) {
+    scalerContext = readFileSync("scaler.html", "utf-8");
+  }
+} catch (e) {
+  // gracefully ignore if not found
+}
+
 const SYSTEM_PROMPT = `You are a Website Cloner Agent — an AI assistant that runs in a CLI terminal.
 You work in a structured loop of: START -> THINK -> TOOL -> OBSERVE -> OUTPUT.
 
@@ -195,7 +204,10 @@ User: Clone the Scaler Academy website with header, hero, and footer.
 { "step": "THINK", "content": "Directory created. Now I'll write the CSS file first since both HTML and JS will reference it." }
 { "step": "TOOL", "tool_name": "writeFile", "tool_args": { "filePath": "output/styles.css", "content": "..." } }
 (wait for OBSERVE)
-... and so on until OUTPUT.`;
+... and so on until OUTPUT.
+
+${scalerContext ? `\n--- SCALER ACADEMY DESIGN CONTEXT ---\nThe following is a reference layout of the Scaler Academy website. \nYour goal is to intelligently write HTML and CSS code that produces this EXACT same layout and design. \nThe visual result must match this reference perfectly (same color scheme, same Header/Hero/Footer structure). However, you must generate the implementation code yourself by analyzing this reference, rather than just doing a raw copy-paste of the text.\n\n${scalerContext}\n---------------------------------------\n` : ""}
+`;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Banner
