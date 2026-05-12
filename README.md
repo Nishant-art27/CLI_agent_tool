@@ -69,7 +69,7 @@ START → THINK → TOOL → OBSERVE → THINK → TOOL → OBSERVE → ... → 
 | Tool | Description |
 |------|-------------|
 | `writeFile(filePath, content)` | Creates/overwrites a file with the given content |
-| `readFile(filePath)` | Reads and returns file contents |
+| `readFile(filePath)` | Reads and returns the file contents |
 | `executeCommand(cmd)` | Runs a shell command and returns output |
 | `fetchWebpage(url)` | Fetches a URL and returns the first 5000 chars |
 
