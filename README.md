@@ -2,7 +2,7 @@
 
 A **conversational CLI agent** that clones websites by generating fully working HTML, CSS, and JavaScript files. Powered by the blazingly fast **Groq API** (`llama-3.3-70b-versatile`) and built with a ReAct (Reasoning + Acting) agent loop.
 
-## 🎯 What It Does know
+## 🎯 What It Does
 
 Give the agent a natural-language instruction like _"Clone the Scaler Academy website"_ and it will:
 
